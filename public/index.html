@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PDF → Markdown | Upstage Document Parse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect width="32" height="32" rx="8" fill="#6366F1"/>
+          <path d="M8 10h16M8 16h12M8 22h14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <h1>PDF → Markdown</h1>
+          <p>Upstage Document Parse API</p>
+        </div>
+      </div>
+    </header>
+
+    <div id="apiWarning" class="api-warning hidden"></div>
+
+    <main class="main">
+      <section class="panel upload-panel">
+        <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="파일 업로드 영역">
+          <input type="file" id="fileInput" accept=".pdf,.png,.jpg,.jpeg,.tiff,.bmp,.gif,.webp,.docx,.pptx,.xlsx,.hwp" hidden />
+          <div class="drop-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <path d="M24 32V16M24 16l-6 6M24 16l6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 32v4a4 4 0 004 4h24a4 4 0 004-4v-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="drop-title">PDF 파일을 드래그하거나 클릭하여 업로드</p>
+          <p class="drop-sub">PDF, 이미지, DOCX, PPTX, XLSX, HWP 지원</p>
+        </div>
+
+        <div id="fileInfo" class="file-info hidden">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M11 2H5a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7l-5-5z" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M11 2v5h5" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          <span id="fileName"></span>
+          <button type="button" id="clearFile" class="btn-icon" title="파일 제거" aria-label="파일 제거">✕</button>
+        </div>
+
+        <div class="options">
+          <label class="option">
+            <span>파싱 모드</span>
+            <select id="mode">
+              <option value="standard">Standard — 빠른 처리</option>
+              <option value="enhanced">Enhanced — 복잡한 표/차트</option>
+              <option value="auto">Auto — 자동 분류</option>
+              <option value="lite">Lite — 텍스트 중심</option>
+            </select>
+          </label>
+          <label class="option">
+            <span>OCR</span>
+            <select id="ocr">
+              <option value="force" selected>Force — 항상 OCR 수행 (권장)</option>
+              <option value="auto">Auto — 디지털 PDF는 내장 텍스트 사용</option>
+            </select>
+          </label>
+          <label class="option checkbox">
+            <input type="checkbox" id="includeImages" checked />
+            <span>Markdown에 이미지 포함 (figure/chart/table)</span>
+          </label>
+          <label class="option checkbox">
+            <input type="checkbox" id="mergeTables" />
+            <span>여러 페이지 표 병합</span>
+          </label>
+          <label class="option checkbox">
+            <input type="checkbox" id="useAsync" />
+            <span>비동기 모드 (100페이지 초과 시 자동 전환)</span>
+          </label>
+        </div>
+
+        <button type="button" id="parseBtn" class="btn-primary" disabled>
+          Markdown으로 변환
+        </button>
+
+        <div id="progress" class="progress hidden">
+          <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+          <p id="progressText">처리 중...</p>
+        </div>
+
+        <div id="errorBox" class="error-box hidden"></div>
+      </section>
+
+      <section class="panel result-panel">
+        <div class="result-header">
+          <h2>변환 결과</h2>
+          <div id="resultActions" class="result-actions hidden">
+            <span id="usageInfo" class="usage-info"></span>
+            <button type="button" id="copyBtn" class="btn-secondary">복사</button>
+            <button type="button" id="downloadBtn" class="btn-secondary">.md 다운로드</button>
+          </div>
+        </div>
+        <div id="preview" class="preview">
+          <div class="preview-empty">
+            <p>변환된 Markdown이 여기에 표시됩니다.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Powered by <a href="https://www.upstage.ai/products/document-parse" target="_blank" rel="noopener">Upstage Document Parse</a></p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
