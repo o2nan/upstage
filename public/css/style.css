@@ -393,6 +393,56 @@ body {
   border: 1px solid var(--border);
 }
 
+.preview-content details {
+  margin: 1em 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.preview-content details summary {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.preview-content details summary::before {
+  content: "▶";
+  font-size: 0.7em;
+  transition: transform 0.2s;
+  display: inline-block;
+}
+
+.preview-content details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.preview-content details summary:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.preview-content details[open] summary {
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.preview-content details > *:not(summary) {
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--text);
+}
+
 .preview-raw {
   padding: 24px;
   font-family: var(--mono);

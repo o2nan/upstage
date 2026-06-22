@@ -259,9 +259,13 @@ function elementToMarkdown(el) {
   const dataUrl = toDataUrl(el.base64_encoding);
 
   if (dataUrl && IMAGE_CATEGORIES.has(el.category)) {
-    const alt = el.category === "table" ? "table" : el.category === "chart" ? "chart" : "figure";
-    const imageMd = `![${alt}](${dataUrl})`;
-    return text ? `${text}\n\n${imageMd}` : imageMd;
+    const labelMap = { table: "표 분석 내용 보기", chart: "차트 분석 내용 보기", figure: "이미지 분석 내용 보기", equation: "수식 분석 내용 보기" };
+    const label = labelMap[el.category] || "분석 내용 보기";
+    const imageMd = `![${el.category}](${dataUrl})`;
+    if (text) {
+      return `${imageMd}\n\n<details>\n<summary>${label}</summary>\n\n${text}\n\n</details>`;
+    }
+    return imageMd;
   }
 
   if (text) return text;
